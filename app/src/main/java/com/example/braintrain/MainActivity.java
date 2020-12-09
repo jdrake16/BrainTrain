@@ -3,6 +3,7 @@ package com.example.braintrain;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,29 +16,42 @@ public class MainActivity extends AppCompatActivity {
 
     Button goButt;
     ArrayList<Integer> answers = new ArrayList<Integer>();
+    int locationCorrectAnswer;
+    TextView resultTextView;
+    int score = 0;
+    int numberOfQuestions = 0;
+
+    TextView scoreTextView;
+    TextView sumTextView;
+    TextView timerTextView;
+
+    Button button0;
+    Button button1;
+    Button button2;
+    Button button3;
+
 
 
     public void chooseAnswer(View view) {
-        Log.i("Tag:", view.getTag().toString());
+        if (Integer.toString(locationCorrectAnswer).equals(view.getTag().toString())) {
+            resultTextView.setText("Correct!");
+            //adds a point to the player.
+            score++;
+        } else {
+            resultTextView.setText("Wrong!");
+        }
+        numberOfQuestions++;
+        scoreTextView.setText(Integer.toString(score) + "/" + Integer.toString(numberOfQuestions));
+        newQuestion();
     }
+
 
     public void start(View view) {
         goButt.animate().alpha(0).setDuration(1000);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        TextView sumTextView = findViewById(R.id.sumTextView);
-        Button button0 = findViewById(R.id.button0);
-        Button button1 = findViewById(R.id.button1);
-        Button button2 = findViewById(R.id.button2);
-        Button button3 = findViewById(R.id.button3);
-
-        goButt = findViewById(R.id.buttonStart);
-
+    public void newQuestion() {
 
         Random rand = new Random();
 
@@ -46,7 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
         sumTextView.setText(Integer.toString(a) + " + " + Integer.toString(b));
 
-        int locationCorrectAnswer = rand.nextInt(4);
+        locationCorrectAnswer = rand.nextInt(4);
+
+        answers.clear();
 
         for (int i = 0; i < 4; i++) {
             if (i == locationCorrectAnswer) {
@@ -65,6 +81,42 @@ public class MainActivity extends AppCompatActivity {
         button1.setText(Integer.toString(answers.get(1)));
         button2.setText(Integer.toString(answers.get(2)));
         button3.setText(Integer.toString(answers.get(3)));
+
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        sumTextView = findViewById(R.id.sumTextView);
+        button0 = findViewById(R.id.button0);
+        button1 = findViewById(R.id.button1);
+        button2 = findViewById(R.id.button2);
+        button3 = findViewById(R.id.button3);
+        resultTextView = findViewById(R.id.textView4);
+        scoreTextView = findViewById(R.id.scoreTextView);
+        timerTextView = findViewById(R.id.timerTextView);
+
+        goButt = findViewById(R.id.buttonStart);
+
+        newQuestion();
+
+        new CountDownTimer(30100, 1000) {
+
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+               timerTextView.setText(String.valueOf(millisUntilFinished / 1000) + "s");
+            }
+
+            @Override
+            public void onFinish() {
+                resultTextView.setText("Time's Up!");
+            }
+        }.start();
+
 
     }
 }
