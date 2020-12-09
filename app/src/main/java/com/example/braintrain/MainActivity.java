@@ -30,7 +30,32 @@ public class MainActivity extends AppCompatActivity {
     Button button2;
     Button button3;
 
+    Button playAgainButton;
 
+
+    public void playAgain(View view) {
+        score = 0;
+        numberOfQuestions = 0;
+        timerTextView.setText("30s");
+        scoreTextView.setText(Integer.toString(score) + "/" + Integer.toString(numberOfQuestions));
+        newQuestion();
+        playAgainButton.animate().alpha(0).setDuration(1000);
+
+        new CountDownTimer(30100, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timerTextView.setText(String.valueOf(millisUntilFinished / 1000) + "s");
+            }
+
+            @Override
+            public void onFinish() {
+                resultTextView.setText("Time's Up!");
+                playAgainButton.animate().alpha(1).setDuration(1000);
+                timerTextView.setText("0s");
+            }
+        }.start();
+    }
 
     public void chooseAnswer(View view) {
         if (Integer.toString(locationCorrectAnswer).equals(view.getTag().toString())) {
@@ -98,25 +123,11 @@ public class MainActivity extends AppCompatActivity {
         resultTextView = findViewById(R.id.textView4);
         scoreTextView = findViewById(R.id.scoreTextView);
         timerTextView = findViewById(R.id.timerTextView);
+        playAgainButton = findViewById(R.id.playAgainButton);
 
         goButt = findViewById(R.id.buttonStart);
-
-        newQuestion();
-
-        new CountDownTimer(30100, 1000) {
-
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-               timerTextView.setText(String.valueOf(millisUntilFinished / 1000) + "s");
-            }
-
-            @Override
-            public void onFinish() {
-                resultTextView.setText("Time's Up!");
-            }
-        }.start();
-
+            //timerTextView is only a placeholder
+        playAgain(findViewById(R.id.timerTextView));
 
     }
 }
