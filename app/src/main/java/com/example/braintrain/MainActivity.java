@@ -3,6 +3,7 @@ package com.example.braintrain;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,13 +17,12 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Integer> answers = new ArrayList<Integer>();
 
 
-    public void start(View view) {
-        goButt.animate().alpha(0).setDuration(1000);
+    public void chooseAnswer(View view) {
+        Log.i("Tag:", view.getTag().toString());
     }
 
-
-    public void chooseAnswer(View view) {
-
+    public void start(View view) {
+        goButt.animate().alpha(0).setDuration(1000);
     }
 
     @Override
@@ -60,5 +60,11 @@ public class MainActivity extends AppCompatActivity {
                 answers.add(wrongAnswer);
             }
         }
+
+        button0.setText(Integer.toString(answers.get(0)));
+        button1.setText(Integer.toString(answers.get(1)));
+        button2.setText(Integer.toString(answers.get(2)));
+        button3.setText(Integer.toString(answers.get(3)));
+
     }
 }
